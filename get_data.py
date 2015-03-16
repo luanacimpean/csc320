@@ -80,7 +80,14 @@ for a in act:
 
 #             cropped.draft("L",(32,32)) 
             imsave("cropped/"+filename, cropped)
-            imshow(cropped.convert("L"))
+            
+            grey = np.zeros((cropped.shape[0], cropped.shape[1])) # init 2D numpy array
+            for rownum in range(len(cropped)):
+                for colnum in range(len(cropped[rownum])):
+                    grey[rownum][colnum] = np.average(cropped[rownum][colnum])            
+            
+            gray()
+            imshow(grey)
             show()
 
             if not os.path.isfile("uncropped/"+filename):
