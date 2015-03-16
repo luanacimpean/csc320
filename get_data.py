@@ -79,7 +79,7 @@ for a in act:
             print type(cropped)
 
 #             cropped.draft("L",(32,32)) 
-            imsave("cropped/"+filename, cropped)
+#            imsave("cropped/"+filename, cropped)
             
             grey = np.zeros((cropped.shape[0], cropped.shape[1])) # init 2D numpy array
             for rownum in range(len(cropped)):
@@ -87,7 +87,13 @@ for a in act:
                     grey[rownum][colnum] = np.average(cropped[rownum][colnum])            
             
             gray()
-            imshow(grey)
+            
+            grey2 = imresize(grey, [32, 32])            
+            
+            imshow(grey2)
+
+            imsave("cropped/"+filename, grey2)          
+            
             show()
 
             if not os.path.isfile("uncropped/"+filename):
