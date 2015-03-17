@@ -70,25 +70,26 @@ for a in act:
 
             timeout(testfile.retrieve, (line.split()[4], "uncropped/"+filename), {}, 30)
             
-           
             if os.path.isfile("uncropped/"+filename):
-                img = array(Image.open("uncropped/"+filename))
-                img = double(img) / 255.0
-                
-#               TODO: some pictures were 2 dimensional? wat? 
-                if(len(img.shape) == 3):  
-                    cropped = img[y1:y2,x1:x2,:]
-                else:
-                    cropped = img[y1:y2,x1:x2]
-                
-                grey = np.zeros((cropped.shape[0], cropped.shape[1])) # init 2D numpy array
-                for rownum in range(len(cropped)):
-                    for colnum in range(len(cropped[rownum])):
-                        grey[rownum][colnum] = np.average(cropped[rownum][colnum])            
-                                
-                grey2 = imresize(grey, [32, 32])                            
-                imsave("cropped/"+filename, grey2) 
-                                                    
+                try: 
+                    img = array(Image.open("uncropped/"+filename))
+                    img = double(img) / 255.0
+                    
+    #               TODO: some pictures were 2 dimensional? wat? 
+                    if(len(img.shape) == 3):  
+                        cropped = img[y1:y2,x1:x2,:]
+                    else:
+                        cropped = img[y1:y2,x1:x2]
+                    
+                    grey = np.zeros((cropped.shape[0], cropped.shape[1])) # init 2D numpy array
+                    for rownum in range(len(cropped)):
+                        for colnum in range(len(cropped[rownum])):
+                            grey[rownum][colnum] = np.average(cropped[rownum][colnum])            
+                                    
+                    grey2 = imresize(grey, [32, 32])                            
+                    imsave("cropped/"+filename, grey2) 
+                except IOError:  
+                    pass
             if not os.path.isfile("uncropped/"+filename):
                 continue
                             
