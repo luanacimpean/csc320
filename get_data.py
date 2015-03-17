@@ -1,4 +1,3 @@
-
 from pylab import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -69,38 +68,29 @@ for a in act:
             #testfile.retrieve(line.split()[4], "uncropped/"+filename)
             #timeout is used to stop downloading images which take too long to download
 
-
             timeout(testfile.retrieve, (line.split()[4], "uncropped/"+filename), {}, 30)
             
-            img = array(Image.open("uncropped/"+filename))
-            img = double(img) / 255.0
-            cropped = img[y1:y2,x1:x2,:]
-
-            print type(cropped)
-
-#             cropped.draft("L",(32,32)) 
-#            imsave("cropped/"+filename, cropped)
-            
-            grey = np.zeros((cropped.shape[0], cropped.shape[1])) # init 2D numpy array
-            for rownum in range(len(cropped)):
-                for colnum in range(len(cropped[rownum])):
-                    grey[rownum][colnum] = np.average(cropped[rownum][colnum])            
-            
-            gray()
-            
-            grey2 = imresize(grey, [32, 32])            
-            
-            imshow(grey2)
-
-            imsave("cropped/"+filename, grey2)          
-            
-            show()
-
+           
+            if os.path.isfile("uncropped/"+filename):
+                img = array(Image.open("uncropped/"+filename))
+                img = double(img) / 255.0
+                
+#               TODO: some pictures were 2 dimensional? wat? 
+                if(len(img.shape) == 3):  
+                    cropped = img[y1:y2,x1:x2,:]
+                else:
+                    cropped = img[y1:y2,x1:x2]
+                
+                grey = np.zeros((cropped.shape[0], cropped.shape[1])) # init 2D numpy array
+                for rownum in range(len(cropped)):
+                    for colnum in range(len(cropped[rownum])):
+                        grey[rownum][colnum] = np.average(cropped[rownum][colnum])            
+                                
+                grey2 = imresize(grey, [32, 32])                            
+                imsave("cropped/"+filename, grey2) 
+                                                    
             if not os.path.isfile("uncropped/"+filename):
                 continue
                             
-            
             print filename
             i += 1
-    
-    
