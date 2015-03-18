@@ -54,7 +54,7 @@ def get_digit_matrix(img_dir):
     im_files = sorted([img_dir + filename for filename in os.listdir(img_dir) if filename[-4:] == ".jpg"])
     im_shape = array((imread(im_files[0])))[:,:,0].shape[:2] # open one image to get the size 
     im_matrix = array([(imread(im_file))[:,:,0].flatten() for im_file in im_files])
-    im_matrix = array([im_matrix[i,:]/(norm(im_matrix[i,:])+0.0001) for i in range(im_matrix.shape[0])])
+    im_matrix = array([im_matrix[i,:]/1.0 for i in range(im_matrix.shape[0])])
     return (im_matrix, im_shape)
     
 
@@ -70,7 +70,7 @@ def display_25_rand_images(im_matrix,im_shape):
     #gray()
     fig = figure()
     for i in range(25):
-        num = random.randint(1, 2359)
+        num = random.randint(1, 767)
         im = array(im_matrix[num,:]).reshape(im_shape)
         subplot(5, 5, i+1)
         imshow(im)
@@ -143,5 +143,6 @@ for i in range(im_matrix.shape[0]):
 
 V,S,mean_im = pca(im_matrix)
 
+gray()
 mean_im.resize(32,32)
 imshow(mean_im)
