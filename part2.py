@@ -142,3 +142,6 @@ for i in range(im_matrix.shape[0]):
     im_matrix[i,:] = im_matrix[i,:]/255.0
 
 V,S,mean_im = pca(im_matrix)
+
+mean_im.resize(32,32)
+imshow(mean_im)
