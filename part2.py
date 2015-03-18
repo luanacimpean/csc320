@@ -59,10 +59,11 @@ def get_digit_matrix(img_dir):
     
 
 def get_reconstruction(V, im, mean_im):
-    coefs = [np.dot(V[i,:], (im-mean_im)) for i in range(V.shape[0])]
+    # altered V[i,:] to V[i,:].reshape(im_shape)
+    coefs = [np.dot(V[i,:].reshape(im_shape), (im-mean_im)) for i in range(V.shape[0])]
     new_im = mean_im.copy()
     for i in range(len(coefs)):
-        new_im = new_im + coefs[i]*V[i, :]
+        new_im = new_im + coefs[i]*(V[i, :].reshape(im_shape))
     return new_im
 
 def display_25_rand_images(im_matrix,im_shape):
