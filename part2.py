@@ -150,3 +150,7 @@ mean_im.resize(32,32)
 #display_save_25_comps(im_matrix,im_shape)
 
 imshow(get_reconstruction(V[:5,], array(im_matrix[0,:]).reshape(im_shape),  mean_im))
+
+r = get_reconstruction(V[:25,], array(im_matrix[120,:]).reshape(im_shape),  mean_im)
+r[where(r<0)] = 0
+imshow(r)
