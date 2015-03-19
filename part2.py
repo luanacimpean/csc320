@@ -78,7 +78,6 @@ def display_25_rand_images(im_matrix,im_shape):
         axis('off')
     savefig('randim.jpg')  
     show()
-    
  
 
 def display_save_25_comps(V, im_shape):
@@ -146,4 +145,8 @@ V,S,mean_im = pca(im_matrix)
 
 gray()
 mean_im.resize(32,32)
-imshow(mean_im)
+#imshow(mean_im)
+#
+#display_save_25_comps(im_matrix,im_shape)
+
+imshow(get_reconstruction(V[:5,], array(im_matrix[0,:]).reshape(im_shape),  mean_im))
