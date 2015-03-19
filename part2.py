@@ -60,10 +60,10 @@ def get_digit_matrix(img_dir):
 
 def get_reconstruction(V, im, mean_im):
     # altered V[i,:] to V[i,:].reshape(im_shape)
-    coefs = [np.dot(V[i,:].reshape(im_shape), (im-mean_im)) for i in range(V.shape[0])]
+    coefs = [np.dot(V[i,:], (im-mean_im)) for i in range(V.shape[0])]
     new_im = mean_im.copy()
     for i in range(len(coefs)):
-        new_im = new_im + coefs[i]*(V[i, :].reshape(im_shape))
+        new_im = new_im + coefs[i]*(V[i, :])
     return new_im
 
 def display_25_rand_images(im_matrix,im_shape):
@@ -136,6 +136,8 @@ def auto_thresh(flattened_im):
 
 #Change this:
 training_dir = '/Users/luanacimpean/Documents/U of T/CSC 320/Project 3/cropped/training/'
+validation_dir = '/Users/luanacimpean/Documents/U of T/CSC 320/Project 3/cropped/validation/'
+test_dir = '/Users/luanacimpean/Documents/U of T/CSC 320/Project 3/cropped/test/'
 
 im_matrix, im_shape = get_digit_matrix(training_dir)
 for i in range(im_matrix.shape[0]):
@@ -143,14 +145,39 @@ for i in range(im_matrix.shape[0]):
 
 V,S,mean_im = pca(im_matrix)
 
+#Using validation set:
+v_im_matrix, v_im_shape = get_digit_matrix(validation_dir)
+for i in range(v_im_matrix.shape[0]):
+    v_im_matrix[i,:] = v_im_matrix[i,:]/255.0
+
 gray()
-mean_im.resize(32,32)
+#mean_im.resize(32,32)
 #imshow(mean_im)
 #
 #display_save_25_comps(im_matrix,im_shape)
 
-imshow(get_reconstruction(V[:5,], array(im_matrix[0,:]).reshape(im_shape),  mean_im))
+#imshow(get_reconstruction(V[:5,], array(im_matrix[0,:]).reshape(im_shape),  mean_im))
 
-r = get_reconstruction(V[:25,], array(im_matrix[120,:]).reshape(im_shape),  mean_im)
-r[where(r<0)] = 0
-imshow(r)
+#r = get_reconstruction(V[:200,], im_matrix[0,:],  mean_im)
+#r[where(r<0)] = 0
+#imshow(r.reshape((32,32)))
+
+i = 0
+for i in range(10):
+    r = get_reconstruction(V[:250,], v_im_matrix[i,:],  mean_im)
+    r[where(r<0)] = 0
+    imshow(r.reshape((32,32)))
+    show()
+
+
+
+
+
+
+#Problem 1
+#display_25_rand_images(im_matrix, im_shape)
+
+
+#Part 2
+#imsave('immean.jpg',mean_im)
+#display_save_25_comps(V, im_shape)
