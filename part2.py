@@ -10,6 +10,7 @@ from scipy.misc import imresize
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import os
+import sys
 
 os.chdir('/Users/luanacimpean/Documents/U of T/CSC 320/Project 3')
 
@@ -65,6 +66,10 @@ def get_reconstruction(V, im, mean_im):
     for i in range(len(coefs)):
         new_im = new_im + coefs[i]*(V[i, :])
     return new_im
+
+def get_coefs(V, im, mean_im):
+    coefs = [np.dot(V[i,:], (im-mean_im)) for i in range(V.shape[0])]
+    return coefs
 
 def display_25_rand_images(im_matrix,im_shape):
     '''Display 25 components in V'''
@@ -162,15 +167,49 @@ gray()
 #r[where(r<0)] = 0
 #imshow(r.reshape((32,32)))
 
-i = 0
-for i in range(10):
-    r = get_reconstruction(V[:250,], v_im_matrix[i,:],  mean_im)
-    r[where(r<0)] = 0
-    imshow(r.reshape((32,32)))
-    show()
+#i = 0
+#for i in range(80):
+#    r = get_reconstruction(V[:2,], v_im_matrix[i,:],  mean_im)
+#    r[where(r<0)] = 0
+#    imshow(r.reshape((32,32)))
+#    show()
+
+#
+#training_coeffs = get_coefs(V[:2,], im_matrix[0,:],  mean_im)
+
+# ----- PART 3 ---------
+#The k values were changed from 2 to 200 to fill in the table
+#min_array = []
+#
+#y = 0
+#for y in range(im_matrix.shape[0] - 1):
+#    r = get_coefs(V[:2,], im_matrix[y,:],  mean_im)
+#    #change x from 1 to 10 to get the first 10 faces in validation set
+#    x = 0       
+#    s = get_coefs(V[:2,], v_im_matrix[x,:],  mean_im)
+#    min_array.append(np.sum((array(r)-array(s))**2))
+#
+#print min_array.index(min(min_array))
+
+# ----------
+
+f = open('output.txt', 'w')
+
+x = 0
+y = 0
+
+for x in range(v_im_matrix.shape[0] - 1):
+    for k in [2, 5, 10, 20, 50, 80, 100, 150, 200]:
+        min_array = []
+        for y in range(im_matrix.shape[0] - 1):
+            r = get_coefs(V[:k,], im_matrix[y,:],  mean_im)      
+            s = get_coefs(V[:k,], v_im_matrix[x,:],  mean_im)
+            min_array.append(np.sum((array(r)-array(s))**2))
+            
+        print >> f, x , '\t' , k , '\t' , min(min_array) , '\t' , min_array.index(min(min_array)) , '\n'
 
 
-
+f.close()
 
 
 
